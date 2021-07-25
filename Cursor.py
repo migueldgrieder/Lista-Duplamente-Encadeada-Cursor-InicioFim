@@ -1,6 +1,7 @@
 class Cursor: #classe do cursor, que ira ter o atributo selecionado que sera um objeto nodo ou none
-    def __init__(self):
+    def __init__(self, listade):
         self.__selecionado = None
+        self.__listade = listade
 
     @property
     def selecionado(self):
@@ -10,13 +11,11 @@ class Cursor: #classe do cursor, que ira ter o atributo selecionado que sera um 
     def selecionado(self, selecionado):
         self.__selecionado = selecionado
 
-    def irParaPrimeiro(self):
-        while self.__selecionado.anterior is not None:
-            self.__selecionado = self.__selecionado.anterior
+    def irParaPrimeiro(self):        
+        self.__selecionado = self.__listade.inicio().posterior
 
     def irParaUltimo(self):
-        while self.__selecionado.posterior is not None:
-            self.__selecionado = self.__selecionado.posterior
+        self.__selecionado = self.__listade.fim().anterior
 
     def avancarKPosicoes(self, k):
         for i in range(k):

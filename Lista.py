@@ -3,12 +3,18 @@ from Nodo import Nodo
 
 class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os nodos e o cursor
     def __init__(self, tamanho_max):
-        self.__cursor = Cursor() #objeto cursor
+        self.__cursor = Cursor(self) #objeto cursor
         self.__tamanho_max = tamanho_max #o tamanho maximo de nodos que a lista ira ter
-        self.__tamanho_atual = 0 #o tamanho de nodos atual da lista~
-        self.__inicio = Nodo(None) 
-        self.__fim = Nodo(None)
+        self.__tamanho_atual = 0 #o tamanho de nodos atual da lista
+        #as referencias inicio e fim sao nodos,o ponteiro de inicio e fim nunca se cruzam
+        self.__inicio = Nodo(None) #no caso do inicio, sera utilizado apenas o ponteiro posterior, sendo definido durante a utilizacao
+        self.__fim = Nodo(None) #no caso do fim, sera utilizado apenas o ponteiro anterior, sendo definido durante a utilizacao
 
+    def inicio(self):
+        return self.__inicio
+        
+    def fim(self):
+        return self.__fim
 
 
     def tamanho_atual(self):
@@ -25,10 +31,14 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
         if self.vazia(): #forma especfica pois se a lista tiver vazia o primeiro nodo nao tera nenhum ponteiro
             self.__cursor.selecionado = novo
             self.__tamanho_atual += 1
+            self.__inicio.posterior = novo
+            self.__fim.anterior = novo
         if self.__cursor.selecionado.anterior is None: #caso o novo nodo seja colocado antes do primeiro nodo
             self.__cursor.selecionado.anterior = novo
             novo.posterior = self.__cursor.selecionado
             self.__tamanho_atual += 1
+            self.__inicio.posterior = novo
+            return novo 
         else: #caso o novo nodo seja colocado no meio de dos nodos ja existentes
             self.__cursor.selecionado.anterior.posterior = novo
             novo.anterior = self.__cursor.selecionado.anterior
@@ -44,34 +54,45 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
         if self.vazia(): #forma especfica pois se a lista tiver vazia o primeiro nodo nao tera nenhum ponteiro
             self.__cursor.selecionado = novo
             self.__tamanho_atual += 1
+            self.__inicio.posterior = novo
+            self.__fim.anterior = novo
         if self.__cursor.selecionado.posterior is None: #caso o cursor estaja na ultima posicao, o novo nodo ira ficar na nova ultima posicao, tendo assim somente o ponterio anterior
             self.__cursor.selecionado.posterior = novo
             novo.anterior = self.__cursor.selecionado
             self.__tamanho_atual += 1
+            self.__fim.anterior = novo
+            return novo
         else: #caso o novo nodo seja colocado no meio de dos nodos ja existentes
             self.__cursor.selecionado.posterior.anterior = novo
             novo.posterior = self.__cursor.selecionado.posterior
             self.__cursor.selecionado.posterior = novo
             novo.anterior = self.__cursor.selecionado
             self.__tamanho_atual += 1
+            
 
     def inserirFim(self, dado): #insere o nodo na ultma posicao da lista
         if self.vazia(): #caso esteja vazia, o novo nodo e criado sem nenhum ponteiro
             novo = Nodo(dado)
             self.__cursor.selecionado = novo
             self.__tamanho_atual += 1
+            self.__inicio.posterior = novo
+            self.__fim.anterior = novo
         else: #leva o cursor para a ultima posicao e chama o metodo de adcionar o novo nodo posteriormente ao selecionado
             self.__cursor.irParaUltimo()
-            self.inserirPosAtual(dado)
+            novo = self.inserirPosAtual(dado)
+            self.__fim.anterior = novo
 
     def inserirFrente(self, dado): #insere o nodo na primeira posicao da lista
         if self.vazia(): #caso esteja vazia, o novo nodo e criado sem nenhum ponteiro
             novo = Nodo(dado)
             self.__cursor.selecionado = novo
-            self.__tamanho_atual += 1
+            self.__tamanho_atual = 1
+            self.__inicio.posterior = novo
+            self.__fim.anterior = novo
         else: #leva o cursor para a primeira posicao e chama o metodo de adcionar o novo nodo anteriormente ao selecionado
             self.__cursor.irParaPrimeiro()
-            self.inserirAntesAtual(dado)
+            novo = self.inserirAntesAtual(dado)
+            self.__inicio.posterior = novo   
 
     def inserirNaPosicao(self, k, dado): #insere o nodo na posicao desejada
         self.__cursor.irParaPrimeiro() #leva o cursor para a primeira posicao
@@ -94,14 +115,19 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
             self.__cursor.selecionado.anterior = None
             self.__cursor.selecionado = None
             self.__tamanho_atual = 0
+            self.__inicio.posterior = None
+            self.__fim.anterior = None
         elif self.__cursor.selecionado.anterior is None: #caso o nodo selecionado seja o primeiro da lista, o ponteiro posterior do nodo selecionado e o ponteiro anterior do proximo nodo serao removidos
             self.__cursor.selecionado.posterior.anterior = None
             self.__cursor.selecionado = self.__cursor.selecionado.posterior
             self.__tamanho_atual -= 1
+            self.__inicio.posterior = self.__cursor.selecionado
+
         elif self.__cursor.selecionado.posterior is None: #caso o nodo selecionado seja o ultimo da lista, o ponteiro anterior e o ponteiro posterior do nodo de tras serao removidos
             self.__cursor.selecionado.anterior.posterior = None
             self.__cursor.selecionado = self.__cursor.selecionado.anterior
             self.__tamanho_atual -= 1
+            self.__fim.anterior = self.__cursor.selecionado
         else: #caso o nodo selecionado esteja entre dois nodos, o ponteiro posterior do nodo de tras ira marcar o nodo posterior do nodo selecionado, e o ponteiro anterior do nodo da frente ira marcar o nodo anterior do selecionado
             self.__cursor.selecionado.anterior.posterior = self.__cursor.selecionado.posterior
             self.__cursor.selecionado.posterior.anterior = self.__cursor.selecionado.anterior
