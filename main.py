@@ -1,6 +1,19 @@
 from Lista import Lista_Encadeada
 
-Lista = Lista_Encadeada(3)
+Lista = Lista_Encadeada(10) #lista definida com tamanho variavel, sendo definida como  de 10 itens
+print('INICIO--Teste de excluir vazio e depois  sobrecarregar a lista em 2')
+Lista.excluirPrim()
+Lista.excluirUlt()
+Lista.excluirElem(10)
+Lista.
+Lista.
+Lista.
+Lista.
+Lista.
+Lista.
+Lista.
+
+
 Lista.inserirFim(19)
 Lista.inserirFim(20)
 Lista.inserirFrente(2)
@@ -48,4 +61,5 @@ print(Lista.tamanho_atual())
 Lista.posicaoDe(19)
 Lista.excluirAtual()
 Lista.posicaoDe(19)
-print('9-----------------------------')
+print('FIM-----------------------------')
+

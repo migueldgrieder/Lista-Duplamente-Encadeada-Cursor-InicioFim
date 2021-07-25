@@ -28,12 +28,12 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
 
         if self.cheia(): 
             print('A lista esta cheia!')
-        if self.vazia(): #forma especfica pois se a lista tiver vazia o primeiro nodo nao tera nenhum ponteiro
+        elif self.vazia(): #forma especfica pois se a lista tiver vazia o primeiro nodo nao tera nenhum ponteiro e tem que ajustar o ponteiro do inicio
             self.__cursor.selecionado = novo
             self.__tamanho_atual += 1
             self.__inicio.posterior = novo
             self.__fim.anterior = novo
-        if self.__cursor.selecionado.anterior is None: #caso o novo nodo seja colocado antes do primeiro nodo
+        elif self.__cursor.selecionado.anterior is None: #caso o novo nodo seja colocado antes do primeiro nodo e tem que ajustar o ponteiro do inicio
             self.__cursor.selecionado.anterior = novo
             novo.posterior = self.__cursor.selecionado
             self.__tamanho_atual += 1
@@ -46,21 +46,21 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
             novo.posterior = self.__cursor.selecionado
             self.__tamanho_atual += 1
 
-    def inserirPosAtual(self, dado): #insere o novo nodo depois do nodo atualmente selecionado
+    def inserirPosAtual(self, dado): #insere o novo nodo depois do nodo atualmente selecionado 
         novo = Nodo(dado)
 
         if self.cheia():
             print('A lista esta cheia!')
-        if self.vazia(): #forma especfica pois se a lista tiver vazia o primeiro nodo nao tera nenhum ponteiro
+        elif self.vazia(): #forma especfica pois se a lista tiver vazia o primeiro nodo nao tera nenhum ponteiro e tem que ajustar o ponteiro do inicio e fim
             self.__cursor.selecionado = novo
             self.__tamanho_atual += 1
             self.__inicio.posterior = novo
             self.__fim.anterior = novo
-        if self.__cursor.selecionado.posterior is None: #caso o cursor estaja na ultima posicao, o novo nodo ira ficar na nova ultima posicao, tendo assim somente o ponterio anterior
+        elif self.__cursor.selecionado.posterior is None: #caso o cursor estaja na ultima posicao, o novo nodo ira ficar na nova ultima posicao, tendo assim somente o ponterio anterior.
             self.__cursor.selecionado.posterior = novo
             novo.anterior = self.__cursor.selecionado
             self.__tamanho_atual += 1
-            self.__fim.anterior = novo
+            self.__fim.anterior = novo #  Ajustar o ponteiro do fim
             return novo
         else: #caso o novo nodo seja colocado no meio de dos nodos ja existentes
             self.__cursor.selecionado.posterior.anterior = novo
@@ -71,25 +71,25 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
             
 
     def inserirFim(self, dado): #insere o nodo na ultma posicao da lista
-        if self.vazia(): #caso esteja vazia, o novo nodo e criado sem nenhum ponteiro
+        if self.vazia(): #caso esteja vazia, o novo nodo e criado sem nenhum ponteiro. Ajustar o ponteiro do inicio e fim
             novo = Nodo(dado)
             self.__cursor.selecionado = novo
             self.__tamanho_atual += 1
             self.__inicio.posterior = novo
             self.__fim.anterior = novo
-        else: #leva o cursor para a ultima posicao e chama o metodo de adcionar o novo nodo posteriormente ao selecionado
+        else: #leva o cursor para a ultima posicao e chama o metodo de adcionar o novo nodo posteriormente ao selecionado. Ajusta o ponteiro do fim
             self.__cursor.irParaUltimo()
             novo = self.inserirPosAtual(dado)
             self.__fim.anterior = novo
 
     def inserirFrente(self, dado): #insere o nodo na primeira posicao da lista
-        if self.vazia(): #caso esteja vazia, o novo nodo e criado sem nenhum ponteiro
+        if self.vazia(): #caso esteja vazia, o novo nodo e criado sem nenhum ponteiro. Ajustar o ponteiro do inicio e fim
             novo = Nodo(dado)
             self.__cursor.selecionado = novo
             self.__tamanho_atual = 1
             self.__inicio.posterior = novo
             self.__fim.anterior = novo
-        else: #leva o cursor para a primeira posicao e chama o metodo de adcionar o novo nodo anteriormente ao selecionado
+        else: #leva o cursor para a primeira posicao e chama o metodo de adcionar o novo nodo anteriormente ao selecionado. Ajustar o ponteiro do inicio
             self.__cursor.irParaPrimeiro()
             novo = self.inserirAntesAtual(dado)
             self.__inicio.posterior = novo   
@@ -99,9 +99,9 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
 
         if self.cheia(): 
             print('A lista esta cheia!')
-        if k > self.__tamanho_atual: #teste caso a lista ainda nao tenha essa posicao ou a posicao seja maior que o tamanho maximo da lista
+        elif k > self.__tamanho_atual: #teste caso a lista ainda nao tenha essa posicao ou a posicao seja maior que o tamanho maximo da lista
             print('A lista ainda tem esse tamanho!')
-        if k < 0: #teste caso a posicao digitada seja negativa
+        elif k < 0: #teste caso a posicao digitada seja negativa
             print('Posicao negativa!')
         else: #avanca com o cursor ate a posicao indicada e insere antes do nodo que atualmente ocupa essa posicao
             self.__cursor.avancarKPosicoes(k-1)
@@ -110,24 +110,27 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
     def excluirAtual(self): #exclui o nodo atualmente selecionado
         if self.vazia(): #caso a lista esteja vazia
             print('A lista esta vazia!')
-        elif self.__tamanho_atual == 1: #caso o nodo seja o unico da lista, sera removido ambos ponterios e o cursor ira apontar para none
+        if type(self.__cursor.selecionado) == type(None): #teste contra sql-injection (gambiarra contra bug)
+            print ('Nenhum elemento selecionado! Indo para o primeiro elemento da lista')
+            self.__cursor.irParaPrimeiro()
+        elif self.__tamanho_atual == 1: #caso o nodo seja o unico da lista, sera removido ambos ponterios e o cursor ira apontar para none. 
             self.__cursor.selecionado.posterior = None
             self.__cursor.selecionado.anterior = None
             self.__cursor.selecionado = None
             self.__tamanho_atual = 0
-            self.__inicio.posterior = None
+            self.__inicio.posterior = None #Ajustar o ponteiro do inicio e fim
             self.__fim.anterior = None
         elif self.__cursor.selecionado.anterior is None: #caso o nodo selecionado seja o primeiro da lista, o ponteiro posterior do nodo selecionado e o ponteiro anterior do proximo nodo serao removidos
             self.__cursor.selecionado.posterior.anterior = None
             self.__cursor.selecionado = self.__cursor.selecionado.posterior
             self.__tamanho_atual -= 1
-            self.__inicio.posterior = self.__cursor.selecionado
+            self.__inicio.posterior = self.__cursor.selecionado #Ajustar o ponteiro do inicio
 
         elif self.__cursor.selecionado.posterior is None: #caso o nodo selecionado seja o ultimo da lista, o ponteiro anterior e o ponteiro posterior do nodo de tras serao removidos
             self.__cursor.selecionado.anterior.posterior = None
             self.__cursor.selecionado = self.__cursor.selecionado.anterior
             self.__tamanho_atual -= 1
-            self.__fim.anterior = self.__cursor.selecionado
+            self.__fim.anterior = self.__cursor.selecionado #Ajustar o ponteiro do fim
         else: #caso o nodo selecionado esteja entre dois nodos, o ponteiro posterior do nodo de tras ira marcar o nodo posterior do nodo selecionado, e o ponteiro anterior do nodo da frente ira marcar o nodo anterior do selecionado
             self.__cursor.selecionado.anterior.posterior = self.__cursor.selecionado.posterior
             self.__cursor.selecionado.posterior.anterior = self.__cursor.selecionado.anterior
@@ -152,7 +155,7 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
         k = k - 1
         if self.vazia():
             print('A lista esta vazia!')
-        if k > self.__tamanho_atual or k < 0:
+        elif k > self.__tamanho_atual or k < 0:
             print('Posicao inexistente!')
         else:
             self.__cursor.avancarKPosicoes(k)
@@ -171,11 +174,16 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
         if self.vazia():
             print('A lista esta vazia!')
         else: 
-            self.__cursor.irParaPrimeiro() #leva o cursor ao inicio, e uttiliza um contador para posicao
+            self.__cursor.irParaPrimeiro() #leva o cursor ao inicio, e utiliza um contador para posicao
             atual = self.__cursor.selecionado
-            posicao = 1
-
+            posicao = 1   
+            if type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
+                    print ('False, elemento nao encontrado!')
+                    return False
             while atual.dado != dado: #loop que checa se o  dado desejado e o mesmo do atualmente selecionado pelo cursor
+                if type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
+                    print ('False, elemento nao encontrado!')
+                    return False
                 if self.__cursor.selecionado.posterior is None: #caso chegue ao final da lista e o nodo proximo sera none, encerra a busca pois nao existe tal dado na lista
                     print('Dado nao encontrado!')
                     return None
@@ -183,20 +191,38 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
                     self.__cursor.avancarKPosicoes(1)
                     atual = self.__cursor.selecionado
                     posicao = posicao + 1
+               
             print('O dado esta na posicao ' , posicao) #caso tenha encontrado utiliza o print para mostrar a posicao
             return posicao
 
+
     def Buscar(self, dado): #busca por um dado na lista, retornando boolean
         self.__cursor.irParaPrimeiro() #leva o cursor para a primeira posicao
-        atual = self.__cursor.selecionado
-
-        while atual.dado != dado: #loop que checa se o  dado desejado e o mesmo do atualmente selecionado pelo cursor
-            if self.__cursor.selecionado.posterior is None:  #caso chegue ao final da lista e o nodo proximo sera none, encerra a busca pois nao existe tal dado na lista
-                print('False')
-                return False
-            else: #avanca uma posicao no curosr
-                self.__cursor.avancarKPosicoes(1)
-                atual = self.__cursor.selecionado
-            
-        print('True') #caso tenha encontrado utiliza o print para mostrar o boolean
-        return True
+        atual = self.__cursor.selecionado 
+        tester = 0
+        if self.vazia():
+            print('A lista esta vazia! False')
+            return False
+        elif type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
+            print ('False, elemento nao encontrado!!!')
+            return False
+       
+        else:
+            while atual.dado != dado: #loop que checa se o  dado desejado e o mesmo do atualmente selecionado pelo cursor
+                if self.__cursor.selecionado.posterior is None:  #caso chegue ao final da lista e o nodo proximo sera none, encerra a busca pois nao existe tal dado na lista
+                    print('False, elemento nao encontrado!')
+                    return False
+                else: #avanca uma posicao no curosr
+                    tester = tester + 1
+                    self.__cursor.avancarKPosicoes(1)
+                    atual = self.__cursor.selecionado
+                if type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
+                    print ('False, elemento nao encontrado!')
+                    return False
+                
+                    
+                    
+                    
+                
+            print('True, elemento encontrado!') #caso tenha encontrado utiliza o print para mostrar o boolean
+            return True

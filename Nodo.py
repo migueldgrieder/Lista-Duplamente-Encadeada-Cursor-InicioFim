@@ -1,15 +1,17 @@
 class Nodo: # um nodo da lista, que possui seu dado, um atributo apontando para o nodo anterior e outro para o nodo posterior 
-    def __init__(self, dado=0, anterior=None, posterior=None):
+    def __init__(self, dado, anterior=None, posterior=None):
         self.__dado = dado
         self.__anterior = anterior
         self.__posterior = posterior
-    # em caso de unico nodo da lista, primeiro da lista ou none, seu ponteiro podera apontar para none
+    # em caso de unico nodo na lista, primeiro da lista ou o ultimo, seu ponteiro podera apontar para none  (nunca apontara para as referencias de inicio e fim)
     @property
     def dado(self):
         return self.__dado
 
-    @dado.setter
+    @dado.setter #um nodo nao pode ter como dado o none
     def dado(self, dado):
+        if dado == None:
+            dado = 0
         self.__dado = dado
 
     @property

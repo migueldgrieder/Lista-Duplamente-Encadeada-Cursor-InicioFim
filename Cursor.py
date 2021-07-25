@@ -1,6 +1,6 @@
-class Cursor: #classe do cursor, que ira ter o atributo selecionado que sera um objeto nodo ou none
+class Cursor: #classe do cursor, que ira ter o atributo selecionado que sera um objeto nodo ou none, e outro da lista que a instancia
     def __init__(self, listade):
-        self.__selecionado = None
+        self.__selecionado = 0
         self.__listade = listade
 
     @property
