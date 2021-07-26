@@ -110,7 +110,7 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
     def excluirAtual(self): #exclui o nodo atualmente selecionado
         if self.vazia(): #caso a lista esteja vazia
             print('A lista esta vazia!')
-        if type(self.__cursor.selecionado) == type(None): #teste contra sql-injection (gambiarra contra bug)
+        if type(self.__cursor.selecionado) == type(None): #teste contra None
             print ('Nenhum elemento selecionado! Indo para o primeiro elemento da lista')
             self.__cursor.irParaPrimeiro()
         elif self.__tamanho_atual == 1: #caso o nodo seja o unico da lista, sera removido ambos ponterios e o cursor ira apontar para none. 
@@ -181,11 +181,11 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
             self.__cursor.irParaPrimeiro() #leva o cursor ao inicio, e utiliza um contador para posicao
             atual = self.__cursor.selecionado
             posicao = 1   
-            if type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
+            if type(atual) == type(None): #teste contra None
                     print ('False, elemento nao encontrado!')
                     return False
             while atual.dado != dado: #loop que checa se o  dado desejado e o mesmo do atualmente selecionado pelo cursor
-                if type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
+                if type(atual) == type(None): #teste contra None
                     print ('False, elemento nao encontrado!')
                     return False
                 if self.__cursor.selecionado.posterior is None: #caso chegue ao final da lista e o nodo proximo sera none, encerra a busca pois nao existe tal dado na lista
@@ -203,7 +203,7 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
     def Buscar(self, dado):
         self.__cursor.irParaPrimeiro()
         x = self.__cursor.selecionado
-        if type(x) == type(None): #teste contra sql-injection (gambiarra contra bug)
+        if type(x) == type(None): #teste contra None
                     print ('False, elemento nao encontrado!')
                     return False
         while x.dado != dado:
