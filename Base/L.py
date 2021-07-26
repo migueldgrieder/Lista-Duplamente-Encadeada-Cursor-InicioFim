@@ -167,3 +167,5 @@ class ListaDE:
                 x = self.__cursor.atual
         print('True, Elemento existe')
         return True
+
+    

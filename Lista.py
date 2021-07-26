@@ -120,22 +120,26 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
             self.__tamanho_atual = 0
             self.__inicio.posterior = None #Ajustar o ponteiro do inicio e fim
             self.__fim.anterior = None
+            print('Nodo removido')
         elif self.__cursor.selecionado.anterior is None: #caso o nodo selecionado seja o primeiro da lista, o ponteiro posterior do nodo selecionado e o ponteiro anterior do proximo nodo serao removidos
             self.__cursor.selecionado.posterior.anterior = None
             self.__cursor.selecionado = self.__cursor.selecionado.posterior
             self.__tamanho_atual -= 1
             self.__inicio.posterior = self.__cursor.selecionado #Ajustar o ponteiro do inicio
+            print('Nodo removido')
 
         elif self.__cursor.selecionado.posterior is None: #caso o nodo selecionado seja o ultimo da lista, o ponteiro anterior e o ponteiro posterior do nodo de tras serao removidos
             self.__cursor.selecionado.anterior.posterior = None
             self.__cursor.selecionado = self.__cursor.selecionado.anterior
             self.__tamanho_atual -= 1
             self.__fim.anterior = self.__cursor.selecionado #Ajustar o ponteiro do fim
+            print('Nodo removido')
         else: #caso o nodo selecionado esteja entre dois nodos, o ponteiro posterior do nodo de tras ira marcar o nodo posterior do nodo selecionado, e o ponteiro anterior do nodo da frente ira marcar o nodo anterior do selecionado
             self.__cursor.selecionado.anterior.posterior = self.__cursor.selecionado.posterior
             self.__cursor.selecionado.posterior.anterior = self.__cursor.selecionado.anterior
             self.__cursor.selecionado = self.__cursor.selecionado.posterior
             self.__tamanho_atual -= 1
+            print('Nodo removido')
 
     def excluirPrim(self): #leva o cursor para o inicio e o exclui pelo metodo exclui atual
         self.__cursor.irParaPrimeiro()
@@ -148,7 +152,7 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
     def excluirElem(self, dado): #busca o dado pelo metodo que seleciona no cursor o item desejado caso exista, e entao usa o metodo exclui atual
         self.Buscar(dado)
         self.excluirAtual()
-        print('Nodo removido')
+        
 
     def excluirDaPos(self, k): #leva o cursor ao inicio, entao avanca os nodos necessarios para chegar a posicao desejada, entao usa o metodo exclui atual
         self.__cursor.irParaPrimeiro()
@@ -196,33 +200,18 @@ class Lista_Encadeada: #classe lista, que gerenciara todas operacoes entre os no
             return posicao
 
 
-    def Buscar(self, dado): #busca por um dado na lista, retornando boolean
-        self.__cursor.irParaPrimeiro() #leva o cursor para a primeira posicao
-        atual = self.__cursor.selecionado 
-        tester = 0
-        if self.vazia():
-            print('A lista esta vazia! False')
-            return False
-        elif type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
-            print ('False, elemento nao encontrado!!!')
-            return False
-       
-        else:
-            while atual.dado != dado: #loop que checa se o  dado desejado e o mesmo do atualmente selecionado pelo cursor
-                if self.__cursor.selecionado.posterior is None:  #caso chegue ao final da lista e o nodo proximo sera none, encerra a busca pois nao existe tal dado na lista
-                    print('False, elemento nao encontrado!')
-                    return False
-                else: #avanca uma posicao no curosr
-                    tester = tester + 1
-                    self.__cursor.avancarKPosicoes(1)
-                    atual = self.__cursor.selecionado
-                if type(atual) == type(None): #teste contra sql-injection (gambiarra contra bug)
+    def Buscar(self, dado):
+        self.__cursor.irParaPrimeiro()
+        x = self.__cursor.selecionado
+        if type(x) == type(None): #teste contra sql-injection (gambiarra contra bug)
                     print ('False, elemento nao encontrado!')
                     return False
-                
-                    
-                    
-                    
-                
-            print('True, elemento encontrado!') #caso tenha encontrado utiliza o print para mostrar o boolean
-            return True
+        while x.dado != dado:
+            if self.__cursor.selecionado.posterior is None:
+                print('False, Elemento Inexistente')
+                return False
+            else:
+                self.__cursor.avancarKPosicoes(1)
+                x = self.__cursor.selecionado
+        print('True, Elemento existe')
+        return True
